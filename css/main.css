@@ -7,8 +7,20 @@
 
 .body-container {
     text-align: center;
-    background-image: url(/img/space-background.jpg);
     background-size: 100%;
+}
+
+.video-background {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    min-width: 100vw;
+    min-height: 100vh;
+    width: auto;
+    height: auto;
+    z-index: -1000;
+    overflow: hidden;
+    opacity: 0.9;
 }
 
 .buttons {
