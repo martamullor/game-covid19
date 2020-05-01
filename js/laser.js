@@ -1,12 +1,9 @@
-class Obstacle {
-    constructor(width,height, x, y,type){
+class Laser {
+    constructor(width,height,x, y){
       this.width = width;
       this.height = height;
       this.x = x;
       this.y = y;
-      this.type = type;
       this.interval = undefined;
     }    
 }
-
-

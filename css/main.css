@@ -44,14 +44,14 @@
     font-size: 3rem;
     background: transparent;
     border: none;
-    color: #79bdff;
     text-align: center;
     text-decoration: none;
+    color: #2b63ff;
 }
 
 .start-button:hover {
     font-weight: 600;
-    color: #2b63ff;
+    color: #84c3ff;
 }
 
 #canvas-container {
