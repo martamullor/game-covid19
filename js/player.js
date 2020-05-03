@@ -10,7 +10,7 @@ class Player {
     this.movement = new Audio();
     this.movement.src = "./sound/movement.mp3";
     this.image = new Image();
-    this.image.src = "./img/science.png";
+    this.image.src = "./img/women-mask.png";
   }
 
   moveRight(){

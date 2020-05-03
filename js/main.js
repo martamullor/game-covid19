@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   ctx = canvas.getContext('2d');
 
   game = new Game({ctx}, 
-    new Player(80,80,200,500),
+    new Player(60,60,200,500),
     new Enemies(50,50, 200, 500),
     canvas.width-100, 
     canvas.height);

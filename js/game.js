@@ -3,7 +3,6 @@ class Game {
     this.ctx = options.ctx;
     this.player = player;
     this.interval = undefined;
-    this.intervalBackground = undefined;
     this.canvasWidth = canvasWidth;
     this.canvasHeight = canvasHeight;
     this.time = 60;
@@ -19,6 +18,9 @@ class Game {
     this.heightNumber = 170;
     this.laser = [];
     this.enemies = [];
+    this.enemiesLaser = [];
+    this.intervalEnemiesLaser = undefined;
+    this.intervalEnemiesMoveDown = undefined;
   }
 
 
@@ -83,7 +85,6 @@ class Game {
       switch (e.keyCode) {
         case 37: // arrow left
           console.log("Left");
-          //this.player.movement.play();
           this.player.moveLeft();
           if (this.player.x < 0) {
             this.player.x = 0;
@@ -91,65 +92,30 @@ class Game {
           break;
         case 39: // arrow right
           console.log("right");
-          //this.player.movement.play();
           this.player.moveRight();
-          if (this.player.x > this.canvasWidth) {
-            this.player.x = this.canvasWidth;
+          if (this.player.x > 820) {
+            this.player.x = 820;
           }
           break;
-        case 32: // space 
+        case 32: // laser 
           this._generateLaser()
-          console.log(this.laser)
-          //this.pause = !this.pause;
           break;
       }
     });
   }
-
-
-  _collidesWithObstacle() {
-    this.obstacle.forEach((element, position) => {
-      if (element.y + element.height >= this.canvasHeight - this.player.height &&
-        (
-          (element.x + element.width >= this.player.x &&
-            element.x + element.width <= this.player.x + this.player.width)
-          ||
-          (this.player.x + this.player.height >= element.x &&
-            this.player.x + this.player.height <= element.x + element.width)
-        )) {
-        if (element.type === "enemy") {
-          this.enemiesSound.play();
-          this._stop();
-          this._printGameOver();
-        } else if (element.type === "oxygen") {
-          this.points += 5;
-          this.time += 5;
-          this.heightNumber += 15;
-          this.oxygenSound.play();
-          this.obstacle.splice(position, 1);
-        } else {
-          this.points += 20;
-          this.jewel += 1;
-          this.jewelSound.play();
-          this.obstacle.splice(position, 1);
-        }
-      }
-    });
-  };
-
 
   /* Laser */
 
   _drawLaser() {
     this.laser.forEach(element => {
       this.laser.image = new Image();
-      this.laser.image.src = "./img/covid.png";
+      this.laser.image.src = "./img/science.png";
       this.ctx.drawImage(this.laser.image, element.x, element.y, element.width, element.height);
     })
   }
 
   _generateLaser() {
-    this.laser.push(new Laser(60, 60, this.player.x, this.player.y));
+    this.laser.push(new Laser(40, 40, this.player.x, this.player.y));
   };
 
 
@@ -159,7 +125,6 @@ class Game {
       this._deleteLaser();
     }
   };
-
 
   _deleteLaser() {
     this.laser.forEach((element) => {
@@ -173,27 +138,122 @@ class Game {
 
   _drawEnemies() {
     this.enemies.forEach(element => {
-      this.enemies.image = new Image();
-      this.enemies.image.src = "./img/women-mask.png";
-      this.ctx.drawImage(this.enemies.image, element.x, element.y, element.width, element.height);
-    })
+      if (element.type === "enemy"){
+        this.enemies.image = new Image();
+        this.enemies.image.src = "./img/enemy.png";
+        this.ctx.drawImage(this.enemies.image, element.x, element.y, element.width, element.height);
+      } else if ( element.type === "no-mask"){
+        this.enemies.image = new Image();
+        this.enemies.image.src = "./img/no-mask.png";
+        this.ctx.drawImage(this.enemies.image, element.x, element.y, element.width, element.height);
+      } else {
+        this.enemies.image = new Image();
+        this.enemies.image.src = "./img/contact.png";
+        this.ctx.drawImage(this.enemies.image, element.x, element.y, element.width, element.height);  
+      }
+    });
   }
 
   _generateEnemies() {
     for (let i = 0; i < 10; i++) {
-      this.enemies.push(new Enemies(60, 60, 80 + (i*70), 150));
+      this.enemies.push(new Enemies(50, 50, 80 + (i * 70), 80, 'enemy'));
+      this.enemies.push(new Enemies(50, 50, 80 + (i * 70), 180, 'no-mask'));
+      this.enemies.push(new Enemies(50, 50, 80 + (i * 70), 280, 'contact'));
     }
   };
 
-  _getRandomNumber(max){
-    return Math.floor(Math.random() * (max - 0)) + 0;  
+  _moveDownEnemies() { 
+    this.intervalEnemiesMoveDown = setInterval(() => {
+      for (let i = 0; i < this.enemies.length; i++){
+        if (this.enemies[i].type === 'no-mask'){
+          this.enemies[i].y += 5; 
+          this._collidesWithEnemies();
+        } else if (this.enemies[i].type === 'enemy'){
+          this.enemies[i].y += 6; 
+          this._collidesWithEnemies();
+        }
+      }  
+    }, 100);
   };
+
+  /*
+  _moveEnemies() {
+    for (let i = 0; i < this.enemies.length; i++) {
+      if (this.enemies.x < 1000){
+        this.enemies[i].x += 1;
+        console.log(this.enemies[i].x)
+      } else if (this.enemies.x > 0) {
+        this.enemies[i].x -= 1;
+      }
+    }
+  };
+  */
+
+ _collidesWithEnemies() {
+  this.enemies.forEach((element, position) => {    
+      if (element.y + element.height >= this.canvasHeight - this.player.height && 
+          (
+              ( element.x + element.width >= this.player.x &&
+                element.x + element.width <= this.player.x + this.player.width) 
+              ||
+              (this.player.x + this.player.height >= element.x &&
+              this.player.x + this.player.height <= element.x + element.width)
+          )) { 
+          if (element.type === "enemy" || "contact" || "no-mask"){
+            this._stop();
+            this._printGameOver();
+          } 
+      }
+  });
+};
+
+  /* Enemies Laser */
+
+  _drawEnemiesLaser() {
+    this.enemiesLaser.forEach(element => {
+      this.enemiesLaser.image = new Image();
+      this.enemiesLaser.image.src = "./img/covid.png";
+      this.ctx.drawImage(this.enemiesLaser.image, element.x, element.y, element.width, element.height);
+    })
+  }
+
+  _generateEnemiesLaser() { 
+    this.intervalEnemiesLaser = setInterval(() => {
+      this.enemiesLaser.push(new EnemiesLaser(40, 40, this._getRandomIntInclusive(20, 700), this.enemies[0].y));
+    }, 3000);
+  };
+
+  _moveEnemiesLaser(){
+    for (let i = 0; i < this.enemiesLaser.length; i++) {
+        this.enemiesLaser[i].y += 2;
+        this._deleteEnemiesLaser();
+      }
+  };
+
+
+  _deleteEnemiesLaser(){
+    this.enemiesLaser.forEach((element) => {
+      if (element.y + element.height === this.canvasHeight+50){
+        this.enemiesLaser.shift();
+      }
+  })
+}
+
+
+  _getRandomIntInclusive(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+
+
 
   // BUCLES 
 
   start() {
     this._assignControlsToKeys();
-    this._generateEnemies(100, 400);
+    this._generateEnemies();
+    this._generateEnemiesLaser();
+    this._moveDownEnemies();
     this.interval = window.requestAnimationFrame(this._update.bind(this));
   };
 
@@ -207,10 +267,11 @@ class Game {
   // Stop All
 
   _stop() {
-    console.log('stop');
     this.interval = clearInterval(this.interval);
-    this.intervalBackground = clearInterval(this.intervalBackground);
     this.intervalLaser = clearInterval(this.intervalLaser);
+    this.intervalEnemiesLaser = clearInterval(this.intervalEnemiesLaser);
+    this.intervalEnemiesMoveDown = clearInterval(this.intervalEnemiesMoveDown);
+    console.log('stop');
   };
 
 
@@ -246,6 +307,9 @@ class Game {
     this._drawLaser();
     this._moveLaser();
     this._drawEnemies();
+    this._drawEnemiesLaser();
+    this._moveEnemiesLaser();
+    //this._moveEnemies();
     this._gameOver();
 
     if (!!this.interval) {
