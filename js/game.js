@@ -1,13 +1,8 @@
 class Game {
-  constructor(options, player, background, canvasWidth, canvasHeight) {
+  constructor(options, player, canvasWidth, canvasHeight) {
     this.ctx = options.ctx;
     this.player = player;
-    this.background = background;
     this.interval = undefined;
-    this.intervalEnemies = undefined;
-    this.intervalOxygen = undefined;
-    this.intervalJewel = undefined;
-    this.obstacle = [];
     this.intervalBackground = undefined;
     this.canvasWidth = canvasWidth;
     this.canvasHeight = canvasHeight;
@@ -23,7 +18,7 @@ class Game {
     this.jewelSound.src = "./sound/jewel.mp3";
     this.heightNumber = 170;
     this.laser = [];
-    this.intervalLaser = undefined;
+    this.enemies = [];
   }
 
 
@@ -143,8 +138,6 @@ class Game {
   };
 
 
-
-
   /* Laser */
 
   _drawLaser() {
@@ -161,10 +154,10 @@ class Game {
 
 
   _moveLaser() {
-      for (let i = 0; i < this.laser.length; i++) {
-        this.laser[i].y -= 5;
-        this._deleteLaser();
-      }
+    for (let i = 0; i < this.laser.length; i++) {
+      this.laser[i].y -= 5;
+      this._deleteLaser();
+    }
   };
 
 
@@ -176,11 +169,31 @@ class Game {
     })
   };
 
+  /* Enemies */
+
+  _drawEnemies() {
+    this.enemies.forEach(element => {
+      this.enemies.image = new Image();
+      this.enemies.image.src = "./img/women-mask.png";
+      this.ctx.drawImage(this.enemies.image, element.x, element.y, element.width, element.height);
+    })
+  }
+
+  _generateEnemies() {
+    for (let i = 0; i < 10; i++) {
+      this.enemies.push(new Enemies(60, 60, 80 + (i*70), 150));
+    }
+  };
+
+  _getRandomNumber(max){
+    return Math.floor(Math.random() * (max - 0)) + 0;  
+  };
 
   // BUCLES 
 
   start() {
     this._assignControlsToKeys();
+    this._generateEnemies(100, 400);
     this.interval = window.requestAnimationFrame(this._update.bind(this));
   };
 
@@ -229,9 +242,10 @@ class Game {
     this._clear();
     this._drawPlayer();
     this._drawTime();
-    this._drawPoints(); 
+    this._drawPoints();
     this._drawLaser();
     this._moveLaser();
+    this._drawEnemies();
     this._gameOver();
 
     if (!!this.interval) {
