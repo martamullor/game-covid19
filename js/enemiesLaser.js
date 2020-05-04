@@ -4,6 +4,5 @@ class EnemiesLaser {
       this.height = height;
       this.x = x;
       this.y = y;
-      this.interval = undefined;
     }    
 }

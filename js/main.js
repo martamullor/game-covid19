@@ -6,8 +6,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   ctx = canvas.getContext('2d');
 
   game = new Game({ctx}, 
-    new Player(60,60,200,500),
-    new Enemies(50,50, 200, 500),
+    new Player(45,45,200,520),
     canvas.width-100, 
     canvas.height);
 
@@ -34,8 +33,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
       canvas.style = "display:block";
 
         game = new Game({ctx}, 
-          new Player(80,80,250,500),
-          canvas.width-100, 
+          new Player(90,90,200,500),
+          canvas.width - 100, 
           canvas.height);
       
       game.start();

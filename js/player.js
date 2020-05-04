@@ -5,12 +5,8 @@ class Player {
     this.height = height;
     this.x = x;
     this.y = y;
-    this.color = "green";
-    this.image = undefined;
-    this.movement = new Audio();
-    this.movement.src = "./sound/movement.mp3";
     this.image = new Image();
-    this.image.src = "./img/women-mask.png";
+    this.image.src = "./img/testtube.png";
   }
 
   moveRight(){

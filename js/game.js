@@ -8,67 +8,11 @@ class Game {
     this.time = 60;
     this.points = 0;
     this.jewel = 0;
-    this.pause = false;
-    this.enemiesSound = new Audio();
-    this.enemiesSound.src = './sound/enemies.mp3';
-    this.oxygenSound = new Audio();
-    this.oxygenSound.src = "./sound/oxygen.mp3";
-    this.jewelSound = new Audio();
-    this.jewelSound.src = "./sound/jewel.mp3";
-    this.heightNumber = 170;
     this.laser = [];
     this.enemies = [];
     this.enemiesLaser = [];
     this.intervalEnemiesLaser = undefined;
     this.intervalEnemiesMoveDown = undefined;
-  }
-
-
-  // Time & Points
-
-  _drawTime() {
-    let time = document.getElementById("segundos");
-    time.innerHTML = this.time;
-  }
-
-  _drawPoints() {
-    let points = document.getElementById("number");
-    points.innerHTML = this.points;
-  }
-
-  _drawJewelNumber() {
-    let jewelNumber = document.getElementById("jewelNumber");
-    jewelNumber.innerHTML = this.jewel;
-  }
-
-  _drawOxygen() {
-    let heightOxygenImage = document.getElementById("container-oxygen-full");
-    heightOxygenImage.style.height = `${this.heightNumber}px`;
-  }
-
-
-  // GameOver 
-
-  _gameOver() {
-    if (this.time === 0) {
-      this._stop();
-      this._printGameOver();
-    }
-  }
-
-
-  _printGameOver() {
-    const gameOver = document.getElementById('gameOver');
-    gameOver.style = "display:block";
-    const gameOverTitle = document.getElementById('gameOverTitle');
-    gameOverTitle.style = "display:block";
-    canvas.style = "display:none";
-    time.style = "display:none";
-    points.style = "display:none";
-    const containerImage = document.getElementById("image-container");
-    containerImage.style = "display:none;";
-    const containerPoints = document.getElementById("container-points");
-    containerPoints.style = "display: none";
   }
 
 
@@ -84,21 +28,20 @@ class Game {
       e.preventDefault();
       switch (e.keyCode) {
         case 37: // arrow left
-          console.log("Left");
           this.player.moveLeft();
           if (this.player.x < 0) {
             this.player.x = 0;
           }
           break;
         case 39: // arrow right
-          console.log("right");
           this.player.moveRight();
-          if (this.player.x > 820) {
-            this.player.x = 820;
+          console.log(this.canvasWidth);
+          if (this.player.x > this.canvasWidth + 50) {
+            this.player.x = this.canvasWidth + 50 ;
           }
           break;
-        case 32: // laser 
-          this._generateLaser()
+        case 32: // barra espaciadora Laser 
+          this._generateLaser();
           break;
       }
     });
@@ -109,13 +52,13 @@ class Game {
   _drawLaser() {
     this.laser.forEach(element => {
       this.laser.image = new Image();
-      this.laser.image.src = "./img/science.png";
+      this.laser.image.src = "./img/goodShot.png";
       this.ctx.drawImage(this.laser.image, element.x, element.y, element.width, element.height);
     })
   }
 
   _generateLaser() {
-    this.laser.push(new Laser(40, 40, this.player.x, this.player.y));
+    this.laser.push(new Laser(30, 30, this.player.x, this.player.y));
   };
 
 
@@ -129,116 +72,113 @@ class Game {
   _deleteLaser() {
     this.laser.forEach((element) => {
       if (element.y + element.height === 0) {
+        console.log('Laser deleted')
         this.laser.shift();
       }
     })
   };
 
-  /* Enemies */
+
+  /* ENEMIES */
+
+
+  _generateEnemies() {
+    for (let i = 0; i < 10; i++) {
+      this.enemies.push(new Enemy(40, 40, 80 + (i * 70), 80, 'bat'));
+      this.enemies.push(new Enemy(40, 40, 80 + (i * 70), 140, 'bat'));
+      this.enemies.push(new Enemy(45, 45, 80 + (i * 70), 220, 'virus'));
+      this.enemies.push(new Enemy(45, 45, 80 + (i * 70), 290, 'virus'));
+    }
+  };
+
+  _moveDownEnemies() {
+    this.intervalEnemiesMoveDown = setInterval(() => {
+      for (let i = 0; i < this.enemies.length; i++) {
+        if (this.enemies[i].type === 'bat') {
+          this.enemies[i].y += 1;
+          this._deleteEnemies();
+        } else if (this.enemies[i].type === 'virus') {
+          this.enemies[i].y += 1;
+          this._deleteEnemies();
+        }
+      }
+    }, 1000);
+  };
+
+  _deleteEnemies() {
+    this.enemies.forEach((element) => {
+      if (element.y + element.height === this.canvasHeight) {
+        console.log('enemy deleted')
+        this.enemies.shift();
+      }
+    })
+  }
 
   _drawEnemies() {
     this.enemies.forEach(element => {
-      if (element.type === "enemy"){
+      if (element.type === "bat") {
         this.enemies.image = new Image();
-        this.enemies.image.src = "./img/enemy.png";
+        this.enemies.image.src = "./img/angrybat.png";
         this.ctx.drawImage(this.enemies.image, element.x, element.y, element.width, element.height);
-      } else if ( element.type === "no-mask"){
+      } else if (element.type === "virus") {
         this.enemies.image = new Image();
-        this.enemies.image.src = "./img/no-mask.png";
+        this.enemies.image.src = "./img/angryvirus.png";
         this.ctx.drawImage(this.enemies.image, element.x, element.y, element.width, element.height);
-      } else {
-        this.enemies.image = new Image();
-        this.enemies.image.src = "./img/contact.png";
-        this.ctx.drawImage(this.enemies.image, element.x, element.y, element.width, element.height);  
       }
     });
   }
 
-  _generateEnemies() {
-    for (let i = 0; i < 10; i++) {
-      this.enemies.push(new Enemies(50, 50, 80 + (i * 70), 80, 'enemy'));
-      this.enemies.push(new Enemies(50, 50, 80 + (i * 70), 180, 'no-mask'));
-      this.enemies.push(new Enemies(50, 50, 80 + (i * 70), 280, 'contact'));
-    }
-  };
-
-  _moveDownEnemies() { 
-    this.intervalEnemiesMoveDown = setInterval(() => {
-      for (let i = 0; i < this.enemies.length; i++){
-        if (this.enemies[i].type === 'no-mask'){
-          this.enemies[i].y += 5; 
-          this._collidesWithEnemies();
-        } else if (this.enemies[i].type === 'enemy'){
-          this.enemies[i].y += 6; 
-          this._collidesWithEnemies();
-        }
-      }  
-    }, 100);
-  };
-
-  /*
-  _moveEnemies() {
-    for (let i = 0; i < this.enemies.length; i++) {
-      if (this.enemies.x < 1000){
-        this.enemies[i].x += 1;
-        console.log(this.enemies[i].x)
-      } else if (this.enemies.x > 0) {
-        this.enemies[i].x -= 1;
-      }
-    }
-  };
-  */
-
- _collidesWithEnemies() {
-  this.enemies.forEach((element, position) => {    
-      if (element.y + element.height >= this.canvasHeight - this.player.height && 
-          (
-              ( element.x + element.width >= this.player.x &&
-                element.x + element.width <= this.player.x + this.player.width) 
-              ||
-              (this.player.x + this.player.height >= element.x &&
-              this.player.x + this.player.height <= element.x + element.width)
-          )) { 
-          if (element.type === "enemy" || "contact" || "no-mask"){
-            this._stop();
-            this._printGameOver();
-          } 
-      }
-  });
-};
-
-  /* Enemies Laser */
+  /* ENEMIES LASER */
 
   _drawEnemiesLaser() {
     this.enemiesLaser.forEach(element => {
       this.enemiesLaser.image = new Image();
-      this.enemiesLaser.image.src = "./img/covid.png";
+      this.enemiesLaser.image.src = "./img/badshot.png";
       this.ctx.drawImage(this.enemiesLaser.image, element.x, element.y, element.width, element.height);
     })
   }
 
-  _generateEnemiesLaser() { 
+  _generateEnemiesLaser() {
     this.intervalEnemiesLaser = setInterval(() => {
-      this.enemiesLaser.push(new EnemiesLaser(40, 40, this._getRandomIntInclusive(20, 700), this.enemies[0].y));
-    }, 3000);
+      this.enemiesLaser.push(new EnemiesLaser(25, 25, this._getRandomIntInclusive(20, 700), this.enemies[this._getRandomIntInclusive(0, 10)].y));
+    }, 2000);
   };
 
-  _moveEnemiesLaser(){
+  _moveEnemiesLaser() {
     for (let i = 0; i < this.enemiesLaser.length; i++) {
-        this.enemiesLaser[i].y += 2;
-        this._deleteEnemiesLaser();
+      this.enemiesLaser[i].y += 2;
+      this._deleteEnemiesLaser();
+      this._collidesWithLaserEnemies();
+    }
+  };
+
+  _collidesWithLaserEnemies() {
+    this.enemiesLaser.forEach((element, position) => {
+      if (element.y + element.height >= this.canvasHeight - this.player.height &&
+        (
+          (element.x + element.width >= this.player.x &&
+            element.x + element.width <= this.player.x + this.player.width)
+          ||
+          (this.player.x + this.player.height >= element.x &&
+            this.player.x + this.player.height <= element.x + element.width)
+        )) {
+        this._stop()
       }
+    });
   };
 
 
-  _deleteEnemiesLaser(){
+  _deleteEnemiesLaser() {
     this.enemiesLaser.forEach((element) => {
-      if (element.y + element.height === this.canvasHeight+50){
+      if (element.y + element.height === this.canvasHeight) {
+        console.log('enemies laser deleted')
         this.enemiesLaser.shift();
       }
-  })
-}
+    })
+  }
 
+
+  /* HELPER FUNCTIONS */
 
   _getRandomIntInclusive(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -246,14 +186,15 @@ class Game {
 
 
 
-
   // BUCLES 
 
   start() {
     this._assignControlsToKeys();
+    console.log('Canvas width', this.canvasWidth);
     this._generateEnemies();
     this._generateEnemiesLaser();
     this._moveDownEnemies();
+    console.log('2.Canvas width', this.canvasWidth);
     this.interval = window.requestAnimationFrame(this._update.bind(this));
   };
 
@@ -275,42 +216,17 @@ class Game {
   };
 
 
-  // Pause 
-
-
-  _pause() {
-    console.log('this.pause :', this.pause);
-    if (!this.pause) {
-      console.log("pause active");
-      this.intervalBackground = clearInterval(this.intervalBackground);
-      this.interval = window.cancelAnimationFrame(this.interval);
-      this.intervalLaser = clearInterval(this.intervalLaser);
-      let pauseText = document.getElementById("pauseText");
-      pauseText.style = "display:block";
-    } else if (this.pause) {
-      console.log("pause inactive");
-      pauseText.style = "display:none";
-      this.start();
-      //this.interval = window.requestAnimationFrame(this._update.bind(this));
-    }
-  };
-
-
   // Update function
 
   _update() {
 
     this._clear();
     this._drawPlayer();
-    this._drawTime();
-    this._drawPoints();
     this._drawLaser();
     this._moveLaser();
     this._drawEnemies();
     this._drawEnemiesLaser();
     this._moveEnemiesLaser();
-    //this._moveEnemies();
-    this._gameOver();
 
     if (!!this.interval) {
       this.interval = window.requestAnimationFrame(this._update.bind(this));
