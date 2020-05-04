@@ -5,9 +5,6 @@ class Game {
     this.interval = undefined;
     this.canvasWidth = canvasWidth;
     this.canvasHeight = canvasHeight;
-    this.time = 60;
-    this.points = 0;
-    this.jewel = 0;
     this.laser = [];
     this.enemies = [];
     this.enemiesLaser = [];
@@ -35,9 +32,8 @@ class Game {
           break;
         case 39: // arrow right
           this.player.moveRight();
-          console.log(this.canvasWidth);
           if (this.player.x > this.canvasWidth + 50) {
-            this.player.x = this.canvasWidth + 50 ;
+            this.player.x = this.canvasWidth + 50;
           }
           break;
         case 32: // barra espaciadora Laser 
@@ -58,13 +54,13 @@ class Game {
   }
 
   _generateLaser() {
-    this.laser.push(new Laser(30, 30, this.player.x, this.player.y));
+    this.laser.push(new Laser(25, 25, this.player.x + 10 , this.player.y));
   };
 
 
   _moveLaser() {
     for (let i = 0; i < this.laser.length; i++) {
-      this.laser[i].y -= 5;
+      this.laser[i].y -= 10;
       this._deleteLaser();
     }
   };
@@ -84,35 +80,38 @@ class Game {
 
   _generateEnemies() {
     for (let i = 0; i < 10; i++) {
-      this.enemies.push(new Enemy(40, 40, 80 + (i * 70), 80, 'bat'));
-      this.enemies.push(new Enemy(40, 40, 80 + (i * 70), 140, 'bat'));
-      this.enemies.push(new Enemy(45, 45, 80 + (i * 70), 220, 'virus'));
-      this.enemies.push(new Enemy(45, 45, 80 + (i * 70), 290, 'virus'));
+      this.enemies.push(new Enemy(40, 40, 100 + (i * 50), 80, 'bat'));
+      this.enemies.push(new Enemy(40, 40, 100 + (i * 50), 130, 'bat'));
+      this.enemies.push(new Enemy(45, 45, 100 + (i * 50), 180, 'virus'));
+      this.enemies.push(new Enemy(45, 45, 100 + (i * 50), 230, 'virus'));
     }
   };
 
   _moveDownEnemies() {
     this.intervalEnemiesMoveDown = setInterval(() => {
       for (let i = 0; i < this.enemies.length; i++) {
-        if (this.enemies[i].type === 'bat') {
-          this.enemies[i].y += 1;
-          this._deleteEnemies();
-        } else if (this.enemies[i].type === 'virus') {
-          this.enemies[i].y += 1;
-          this._deleteEnemies();
-        }
+          this.enemies[i].y += 3;
+          this._collidesEnemies();
       }
     }, 1000);
   };
 
-  _deleteEnemies() {
-    this.enemies.forEach((element) => {
-      if (element.y + element.height === this.canvasHeight) {
-        console.log('enemy deleted')
-        this.enemies.shift();
+
+  _collidesEnemies() {
+    this.enemies.forEach((element, position) => {
+      if (element.y + element.height >= this.canvasHeight - this.player.height &&
+        (
+          (element.x + element.width >= this.player.x &&
+            element.x + element.width <= this.player.x + this.player.width)
+          ||
+          (this.player.x + this.player.height >= element.x &&
+            this.player.x + this.player.height <= element.x + element.width)
+        )) {
+        // Cambiar a Game Over 
+        this._stop();
       }
-    })
-  }
+    });
+  };
 
   _drawEnemies() {
     this.enemies.forEach(element => {
@@ -128,6 +127,7 @@ class Game {
     });
   }
 
+
   /* ENEMIES LASER */
 
   _drawEnemiesLaser() {
@@ -140,17 +140,19 @@ class Game {
 
   _generateEnemiesLaser() {
     this.intervalEnemiesLaser = setInterval(() => {
-      this.enemiesLaser.push(new EnemiesLaser(25, 25, this._getRandomIntInclusive(20, 700), this.enemies[this._getRandomIntInclusive(0, 10)].y));
+      this.enemiesLaser.push(new EnemiesLaser(25, 25, this._getRandomIntInclusive(20, 500), this.enemies[this._getRandomIntInclusive(0, 10)].y));
     }, 2000);
   };
 
+
   _moveEnemiesLaser() {
     for (let i = 0; i < this.enemiesLaser.length; i++) {
-      this.enemiesLaser[i].y += 2;
+      this.enemiesLaser[i].y += 8;
       this._deleteEnemiesLaser();
       this._collidesWithLaserEnemies();
     }
   };
+
 
   _collidesWithLaserEnemies() {
     this.enemiesLaser.forEach((element, position) => {
@@ -162,7 +164,8 @@ class Game {
           (this.player.x + this.player.height >= element.x &&
             this.player.x + this.player.height <= element.x + element.width)
         )) {
-        this._stop()
+        // Cambiar a Game Over 
+        this.enemiesLaser.shift();
       }
     });
   };
@@ -171,7 +174,7 @@ class Game {
   _deleteEnemiesLaser() {
     this.enemiesLaser.forEach((element) => {
       if (element.y + element.height === this.canvasHeight) {
-        console.log('enemies laser deleted')
+        console.log('Laser Enemies deleted');
         this.enemiesLaser.shift();
       }
     })
@@ -190,11 +193,9 @@ class Game {
 
   start() {
     this._assignControlsToKeys();
-    console.log('Canvas width', this.canvasWidth);
     this._generateEnemies();
     this._generateEnemiesLaser();
     this._moveDownEnemies();
-    console.log('2.Canvas width', this.canvasWidth);
     this.interval = window.requestAnimationFrame(this._update.bind(this));
   };
 
