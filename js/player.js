@@ -10,10 +10,10 @@ class Player {
   }
 
   moveRight(){
-    this.x += 20;
+    this.x += 25;
   }
 
   moveLeft(){
-    this.x -= 20;
+    this.x -= 25;
   }
 }

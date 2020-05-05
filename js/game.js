@@ -76,12 +76,13 @@ class Game {
   };
 
   _collidesLaser() {
-    this.enemies.forEach((enemies) => {
+    this.enemies.forEach((enemies, position) => {
       this.laser.forEach((laser) => {
-        if(laser.x >= (enemies.x - enemies.width/2) && laser.x <= (enemies.x + enemies.width/2) &&
-        laser.y >= (enemies.y - enemies.height/2) && laser.y <= (enemies.y + enemies.height/2)) {
+        if (laser.x >= (enemies.x - enemies.width / 2) && laser.x <= (enemies.x + enemies.width / 2) &&
+          laser.y >= (enemies.y - enemies.height / 2) && laser.y <= (enemies.y + enemies.height / 2)) {
           // Cambiar a Game Over 
           this.laser.shift();
+          this.enemies.splice(position, 1);
         }
       });
     });
@@ -105,7 +106,7 @@ class Game {
   _moveDownEnemies() {
     this.intervalEnemiesMoveDown = setInterval(() => {
       for (let i = 0; i < this.enemies.length; i++) {
-        this.enemies[i].y += 3;
+        this.enemies[i].y += 50;
         this._collidesEnemies();
       }
     }, 1000);
@@ -113,15 +114,11 @@ class Game {
 
 
   _collidesEnemies() {
-    this.enemies.forEach((element, position) => {
-      if (element.y + element.height >= this.canvasHeight - this.player.height &&
-        (
-          (element.x + element.width >= this.player.x &&
-            element.x + element.width <= this.player.x + this.player.width)
-          ||
-          (this.player.x + this.player.height >= element.x &&
-            this.player.x + this.player.height <= element.x + element.width)
-        )) {
+    this.enemies.forEach((enemies, position) => {
+      if((enemies.x + enemies.width/2) > (this.player.x - this.player.width/2) && 
+      (enemies.x - enemies.width/2) < (this.player.x + this.player.width/2) &&
+      (enemies.y + enemies.height/2) > (this.player.y - this.player.height/2) &&
+      (enemies.y - enemies.height/2) < (this.player.y + this.player.height/2)) {
         // Cambiar a Game Over 
         this._stop();
       }
@@ -156,13 +153,13 @@ class Game {
   _generateEnemiesLaser() {
     this.intervalEnemiesLaser = setInterval(() => {
       this.enemiesLaser.push(new EnemiesLaser(25, 25, this._getRandomIntInclusive(20, 500), this.enemies[this._getRandomIntInclusive(0, 10)].y));
-    }, 2000);
+    }, 500);
   };
 
 
   _moveEnemiesLaser() {
     for (let i = 0; i < this.enemiesLaser.length; i++) {
-      this.enemiesLaser[i].y += 8;
+      this.enemiesLaser[i].y += 6;
       this._deleteEnemiesLaser();
       this._collidesWithLaserEnemies();
     }
@@ -170,17 +167,12 @@ class Game {
 
 
   _collidesWithLaserEnemies() {
-    this.enemiesLaser.forEach((element, position) => {
-      if (element.y + element.height >= this.canvasHeight - this.player.height &&
-        (
-          (element.x + element.width >= this.player.x &&
-            element.x + element.width <= this.player.x + this.player.width)
-          ||
-          (this.player.x + this.player.height >= element.x &&
-            this.player.x + this.player.height <= element.x + element.width)
-        )) {
+    this.enemiesLaser.forEach((enemiesLaser, position) => {
+      if (enemiesLaser.x >= (this.player.x - this.player.width / 2) && enemiesLaser.x <= (this.player.x + this.player.width / 2) &&
+        enemiesLaser.y >= (this.player.y - this.player.height / 2) && enemiesLaser.y <= (this.player.y + this.player.height / 2)) {
         // Cambiar a Game Over 
-        this.enemiesLaser.shift();
+        console.log('se ha parado')
+        this._stop();
       }
     });
   };
@@ -201,28 +193,6 @@ class Game {
   _getRandomIntInclusive(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
-
-
-  hit(a, b) {
-    let hit = false;
-    if (b.x + b.width >= a.x && b.x < a.x + a.width) {
-      if (b.y + b.height >= a.y && b.y < a.y + a.height) {
-        hit = true;
-      }
-    }
-    if (b.x <= a.x && b.x + b.width >= a.x + a.width) {
-      if (b.y <= a.y && b.y + b.height >= a.y + a.height) {
-        hit = true;
-      }
-    }
-    if (a.x <= b.x && a.x + a.width >= b.x + b.width) {
-      if (a.y <= b.y && a.y + a.height >= b.y + b.height) {
-        hit = true;
-      }
-    }
-    return hit;
-  }
-
 
 
   // BUCLES 
