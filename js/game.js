@@ -54,25 +54,40 @@ class Game {
   }
 
   _generateLaser() {
-    this.laser.push(new Laser(25, 25, this.player.x + 10 , this.player.y));
+    this.laser.push(new Laser(25, 25, this.player.x + 10, this.player.y));
   };
 
 
   _moveLaser() {
     for (let i = 0; i < this.laser.length; i++) {
       this.laser[i].y -= 10;
+      this._collidesLaser();
       this._deleteLaser();
     }
   };
 
   _deleteLaser() {
     this.laser.forEach((element) => {
-      if (element.y + element.height === 0) {
+      if (element.y === 0) {
         console.log('Laser deleted')
         this.laser.shift();
       }
     })
   };
+
+  _collidesLaser() {
+    this.enemies.forEach((enemies) => {
+      this.laser.forEach((laser) => {
+        if(laser.x >= (enemies.x - enemies.width/2) && laser.x <= (enemies.x + enemies.width/2) &&
+        laser.y >= (enemies.y - enemies.height/2) && laser.y <= (enemies.y + enemies.height/2)) {
+          // Cambiar a Game Over 
+          this.laser.shift();
+        }
+      });
+    });
+  };
+
+
 
 
   /* ENEMIES */
@@ -90,8 +105,8 @@ class Game {
   _moveDownEnemies() {
     this.intervalEnemiesMoveDown = setInterval(() => {
       for (let i = 0; i < this.enemies.length; i++) {
-          this.enemies[i].y += 3;
-          this._collidesEnemies();
+        this.enemies[i].y += 3;
+        this._collidesEnemies();
       }
     }, 1000);
   };
@@ -185,6 +200,27 @@ class Game {
 
   _getRandomIntInclusive(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+
+  hit(a, b) {
+    let hit = false;
+    if (b.x + b.width >= a.x && b.x < a.x + a.width) {
+      if (b.y + b.height >= a.y && b.y < a.y + a.height) {
+        hit = true;
+      }
+    }
+    if (b.x <= a.x && b.x + b.width >= a.x + a.width) {
+      if (b.y <= a.y && b.y + b.height >= a.y + a.height) {
+        hit = true;
+      }
+    }
+    if (a.x <= b.x && a.x + a.width >= b.x + b.width) {
+      if (a.y <= b.y && a.y + a.height >= b.y + b.height) {
+        hit = true;
+      }
+    }
+    return hit;
   }
 
 
