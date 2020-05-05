@@ -17,7 +17,7 @@ class Game {
 
   // Points 
 
-  _drawPoints(){
+  _drawPoints() {
     let points = document.getElementById("number");
     points.innerHTML = this.points;
   }
@@ -81,9 +81,15 @@ class Game {
       this.laser.forEach((laser) => {
         if (laser.x >= (enemies.x - enemies.width / 2) && laser.x <= (enemies.x + enemies.width / 2) &&
           laser.y >= (enemies.y - enemies.height / 2) && laser.y <= (enemies.y + enemies.height / 2)) {
-          // Cambiar a Game Over 
-          this.laser.shift();
-          this.enemies.splice(position, 1);
+          if (enemies.type === 'bat') {
+            this.points += 50;
+            this.laser.shift();
+            this.enemies.splice(position, 1);
+          } else if (enemies.type === 'virus') {
+            this.points += 10;
+            this.laser.shift();
+            this.enemies.splice(position, 1);
+          }
         }
       });
     });
@@ -101,11 +107,11 @@ class Game {
   // Enemies 
 
   _generateEnemies() {
-    for (let i = 0; i < 10; i++) {
-      this.enemies.push(new Enemy(40, 40, 100 + (i * 50), 80, 'bat'));
-      this.enemies.push(new Enemy(40, 40, 100 + (i * 50), 130, 'bat'));
-      this.enemies.push(new Enemy(45, 45, 100 + (i * 50), 180, 'virus'));
-      this.enemies.push(new Enemy(45, 45, 100 + (i * 50), 230, 'virus'));
+    for (let i = 0; i < 15; i++) {
+      this.enemies.push(new Enemy(40, 40, 80 + (i * 50), 80, 'bat'));
+      this.enemies.push(new Enemy(40, 40, 80 + (i * 50), 130, 'bat'));
+      this.enemies.push(new Enemy(45, 45, 80 + (i * 50), 180, 'virus'));
+      this.enemies.push(new Enemy(45, 45, 80 + (i * 50), 230, 'virus'));
     }
   };
 
@@ -121,10 +127,10 @@ class Game {
 
   _collidesEnemies() {
     this.enemies.forEach((enemies, position) => {
-      if((enemies.x + enemies.width/2) > (this.player.x - this.player.width/2) && 
-      (enemies.x - enemies.width/2) < (this.player.x + this.player.width/2) &&
-      (enemies.y + enemies.height/2) > (this.player.y - this.player.height/2) &&
-      (enemies.y - enemies.height/2) < (this.player.y + this.player.height/2)) {
+      if ((enemies.x + enemies.width / 2) > (this.player.x - this.player.width / 2) &&
+        (enemies.x - enemies.width / 2) < (this.player.x + this.player.width / 2) &&
+        (enemies.y + enemies.height / 2) > (this.player.y - this.player.height / 2) &&
+        (enemies.y - enemies.height / 2) < (this.player.y + this.player.height / 2)) {
         // Cambiar a Game Over 
         this._stop();
       }
@@ -158,12 +164,12 @@ class Game {
 
   _generateEnemiesLaser() {
     this.intervalEnemiesLaser = setInterval(() => {
-      this.enemiesLaser.push(new EnemiesLaser(25, 25, this._getRandomIntInclusive(20, 500), this.enemies[this._getRandomIntInclusive(0, 10)].y));
-    }, 1000);
+      this.enemiesLaser.push(new EnemiesLaser(20, 20, this.enemies[this._getRandomIntInclusive(0, 50)].x, this.enemies[this._getRandomIntInclusive(0, 10)].y));
+    }, 300);
   };
 
 
-  _moveEnemiesLaser() {
+  _moveEnemiesLaserDown() {
     for (let i = 0; i < this.enemiesLaser.length; i++) {
       this.enemiesLaser[i].y += 6;
       this._deleteEnemiesLaser();
@@ -228,7 +234,7 @@ class Game {
       this.laser.forEach((laser) => {
         if (laser.x >= (extraPoints.x - extraPoints.width / 2) && laser.x <= (extraPoints.x + extraPoints.width / 2) &&
           laser.y >= (extraPoints.y - extraPoints.height / 2) && laser.y <= (extraPoints.y + extraPoints.height / 2)) {
-          // Cambiar a Game Over 
+          this.points += 200;
           this.laser.shift();
           this.extraPoints.splice(position, 1);
         }
@@ -286,7 +292,7 @@ class Game {
     this._moveLaser();
     this._drawEnemies();
     this._drawEnemiesLaser();
-    this._moveEnemiesLaser();
+    this._moveEnemiesLaserDown();
     this._drawPoints();
 
     if (!!this.interval) {
