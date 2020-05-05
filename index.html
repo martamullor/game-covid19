@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,40 +35,18 @@
 
     <div id="canvas-container">
 
-        <div class="game-container">
-            <canvas id="canvas" style="display: none;" width="886" height="600"></canvas>
-            <h2 id="pauseText" style="display: none;">PAUSE.</h2>
-        </div>
-
         <div id="container-points" style="display: none;">
-
-            <div id=time style="display: none;">
-                <p class="time-text"><img src="img/time.png" class="time-image" alt="time-image"> <span
-                        id="segundos"></span></p>
-            </div>
-
-            <div id=points style="display: none;">
-                <p class="points-text"> <img src="img/saturn.png" class="score-image" alt="score-image"><span
+            <div id = points style="display: none;">
+                <p class="points-text"><span
                         id="number"></span></p>
                 <p class="points-text-score"> Points</p>
             </div>
 
-            <div id=jewel-container style="display: block;">
-                <p class="jewel-text"> <img src="img/gem.png" class="jewel-image" alt="jewel-image"><span
-                        id="jewelNumber"></span></p>
-            </div>
+        </div>
 
-            <div id="image-container" style="display: none;">
-                <img id="oxygen-empty" src="img/oxygen-empty.png" alt="oxygen">
-
-                <div id="container-oxygen-full">
-                    <img id="oxygen-full" src="img/oxygen.png" alt="oxygen full">
-                </div>
-            </div>
-
-
-
-
+        <div class="game-container">
+            <canvas id="canvas" style="display: none;" width="886" height="600"></canvas>
+            <h2 id="pauseText" style="display: none;">PAUSE.</h2>
         </div>
 
     </div>
@@ -76,6 +55,7 @@
     <script src="js/enemy.js"></script>
     <script src="js/laser.js"></script>
     <script src="js/enemiesLaser.js"></script>
+    <script src="js/extraPoints.js"></script>
     <script src="js/game.js"></script>
     <script src="js/main.js"></script>
 

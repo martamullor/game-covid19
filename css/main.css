@@ -56,81 +56,37 @@
 
 #canvas-container {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin: 10px 20px 10px 10px;
-}
-
-.game-container {
-    position: relative;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
 }
 
 canvas {
-    border: 5px solid black;
+    border: 3px solid #84c3ff;
     border-radius: 20px;
-    margin: 40px;
+    margin: 10px 40px 40px 40px;
 }
 
 #container-points {
-    text-align: left;
-    margin: 40px 0px 40px -30px;
-    line-height: 15px;
-    border: 3px solid black;
-    border-radius: 20px;
-    padding: 30px;
-}
-
-.time-text {
-    align-items: center;
     display: flex;
+    flex-direction: row;
+    margin: 50px 40px 10px 40px;
 }
 
-
-#segundos {
-    padding-left: 30px;
-    font-size: 60px;
-}
 
 #number {
     font-size: 60px;
-    margin-top: 22px;
-    padding-left: 30px;
 }
 
 .points-text-score {
     margin: -20px 0px 0px 100px;
     font-size: 20px;
-}
-
-.points-text {
-    display: flex;
-    margin-top: 50px;
+    color: #2b63ff;
 }
 
 .score-image {
-    width: 70px;
+    width: 20px;
 }
-
-.time-image {
-    width: 60px;
-}
-
-
-.jewel-text {
-    font-size: 30px;
-    margin-top: 40px;
-    display: flex;
-}
-
-#jewelNumber {
-    margin: 20px 0px 0px 30px;
-    font-size: 60px;
-}
-
-.jewel-image {
-    width: 60px;
-}
-
 
 #pauseText {
     position: absolute;

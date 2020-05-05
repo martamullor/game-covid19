@@ -2,14 +2,16 @@ class Game {
   constructor(options, player, canvasWidth, canvasHeight) {
     this.ctx = options.ctx;
     this.player = player;
-    this.interval = undefined;
     this.canvasWidth = canvasWidth;
     this.canvasHeight = canvasHeight;
     this.laser = [];
     this.enemies = [];
     this.enemiesLaser = [];
+    this.extraPoints = [];
+    this.interval = undefined;
     this.intervalEnemiesLaser = undefined;
     this.intervalEnemiesMoveDown = undefined;
+    this.intervalExtraPoints = undefined;
   }
 
 
@@ -36,14 +38,14 @@ class Game {
             this.player.x = this.canvasWidth + 50;
           }
           break;
-        case 32: // barra espaciadora Laser 
+        case 32: // space bar - laser player
           this._generateLaser();
           break;
       }
     });
   }
 
-  /* Laser */
+  // Laser Player 
 
   _drawLaser() {
     this.laser.forEach(element => {
@@ -66,15 +68,6 @@ class Game {
     }
   };
 
-  _deleteLaser() {
-    this.laser.forEach((element) => {
-      if (element.y === 0) {
-        console.log('Laser deleted')
-        this.laser.shift();
-      }
-    })
-  };
-
   _collidesLaser() {
     this.enemies.forEach((enemies, position) => {
       this.laser.forEach((laser) => {
@@ -88,11 +81,16 @@ class Game {
     });
   };
 
+  _deleteLaser() {
+    this.laser.forEach((element) => {
+      if (element.y === 0) {
+        this.laser.shift();
+      }
+    })
+  };
 
 
-
-  /* ENEMIES */
-
+  // Enemies 
 
   _generateEnemies() {
     for (let i = 0; i < 10; i++) {
@@ -106,7 +104,7 @@ class Game {
   _moveDownEnemies() {
     this.intervalEnemiesMoveDown = setInterval(() => {
       for (let i = 0; i < this.enemies.length; i++) {
-        this.enemies[i].y += 50;
+        this.enemies[i].y += 3;
         this._collidesEnemies();
       }
     }, 1000);
@@ -137,10 +135,10 @@ class Game {
         this.ctx.drawImage(this.enemies.image, element.x, element.y, element.width, element.height);
       }
     });
-  }
+  };
 
 
-  /* ENEMIES LASER */
+  // Enemies laser
 
   _drawEnemiesLaser() {
     this.enemiesLaser.forEach(element => {
@@ -148,12 +146,12 @@ class Game {
       this.enemiesLaser.image.src = "./img/badshot.png";
       this.ctx.drawImage(this.enemiesLaser.image, element.x, element.y, element.width, element.height);
     })
-  }
+  };
 
   _generateEnemiesLaser() {
     this.intervalEnemiesLaser = setInterval(() => {
       this.enemiesLaser.push(new EnemiesLaser(25, 25, this._getRandomIntInclusive(20, 500), this.enemies[this._getRandomIntInclusive(0, 10)].y));
-    }, 500);
+    }, 1000);
   };
 
 
@@ -171,7 +169,6 @@ class Game {
       if (enemiesLaser.x >= (this.player.x - this.player.width / 2) && enemiesLaser.x <= (this.player.x + this.player.width / 2) &&
         enemiesLaser.y >= (this.player.y - this.player.height / 2) && enemiesLaser.y <= (this.player.y + this.player.height / 2)) {
         // Cambiar a Game Over 
-        console.log('se ha parado')
         this._stop();
       }
     });
@@ -181,32 +178,77 @@ class Game {
   _deleteEnemiesLaser() {
     this.enemiesLaser.forEach((element) => {
       if (element.y + element.height === this.canvasHeight) {
-        console.log('Laser Enemies deleted');
         this.enemiesLaser.shift();
       }
     })
-  }
+  };
+
+  // Extra Points
+
+  _drawExtraPoints() {
+    this.extraPoints.forEach(element => {
+      this.extraPoints.image = new Image();
+      this.extraPoints.image.src = "./img/toilettepaper.png";
+      this.ctx.drawImage(this.extraPoints.image, element.x, element.y, element.width, element.height);
+    })
+  };
+
+  _generateExtraPoints() {
+    this.intervalExtraPoints = setInterval(() => {
+      this.extraPoints.push(new ExtraPoints(40, 40, this.canvasWidth - 40, 40));
+    }, 5000);
+  };
+
+  _moveExtraPoints() {
+    for (let i = 0; i < this.extraPoints.length; i++) {
+      this.extraPoints[i].x -= 5;
+      this._collidesExtraPoint();
+      this._deleteExtraPoints();
+    }
+  };
+
+  _deleteExtraPoints() {
+    this.extraPoints.forEach((element) => {
+      if (element.x + element.width === 0) {
+        this.extraPoints.shift();
+      }
+    })
+  };
+
+  _collidesExtraPoint() {
+    this.extraPoints.forEach((extraPoints, position) => {
+      this.laser.forEach((laser) => {
+        if (laser.x >= (extraPoints.x - extraPoints.width / 2) && laser.x <= (extraPoints.x + extraPoints.width / 2) &&
+          laser.y >= (extraPoints.y - extraPoints.height / 2) && laser.y <= (extraPoints.y + extraPoints.height / 2)) {
+          // Cambiar a Game Over 
+          this.laser.shift();
+          this.extraPoints.splice(position, 1);
+        }
+      });
+    });
+  };
 
 
-  /* HELPER FUNCTIONS */
+  // Help functions
 
   _getRandomIntInclusive(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
 
-  // BUCLES 
+  // Loops
 
   start() {
     this._assignControlsToKeys();
     this._generateEnemies();
     this._generateEnemiesLaser();
+    this._generateExtraPoints();
     this._moveDownEnemies();
     this.interval = window.requestAnimationFrame(this._update.bind(this));
   };
 
 
-  // Limpiado
+  // Clean
 
   _clear() {
     this.ctx.clearRect(0, 0, 886, 600);
@@ -219,6 +261,7 @@ class Game {
     this.intervalLaser = clearInterval(this.intervalLaser);
     this.intervalEnemiesLaser = clearInterval(this.intervalEnemiesLaser);
     this.intervalEnemiesMoveDown = clearInterval(this.intervalEnemiesMoveDown);
+    this.intervalExtraPoints = clearInterval(this.intervalExtraPoints);
     console.log('stop');
   };
 
@@ -230,6 +273,8 @@ class Game {
     this._clear();
     this._drawPlayer();
     this._drawLaser();
+    this._drawExtraPoints();
+    this._moveExtraPoints();
     this._moveLaser();
     this._drawEnemies();
     this._drawEnemiesLaser();

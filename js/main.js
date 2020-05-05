@@ -19,14 +19,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
       startButton.style = "display: none";
       const startImage = document.getElementById("img-start")
       startImage.style = "display: none";
-      const time = document.getElementById("time");
-      time.style = "display: block";
       const containerPoints = document.getElementById("container-points");
       containerPoints.style = "display: block";
       const points = document.getElementById("points");
       points.style = "display: block";
-      const containerImage = document.getElementById("image-container");
-      containerImage.style = "display:block;";
     }
 
     function restart(){
@@ -41,10 +37,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
       gameOver.style = "display:none";
       gameOverTitle.style = "display:none";
-      time.style = "display:block";
       points.style = "display:block";
-      const containerImage = document.getElementById("image-container");
-      containerImage.style = "display:block;";
       const containerPoints = document.getElementById("container-points");
       containerPoints.style = "display:block;";
 
