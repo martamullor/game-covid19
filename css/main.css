@@ -68,19 +68,19 @@ canvas {
 }
 
 #container-points {
-    display: flex;
-    flex-direction: row;
-    margin: 50px 40px 10px 40px;
+    margin: 0px -50px 10px -790px;
+    text-align: left;
 }
 
 
 #number {
-    font-size: 60px;
+    font-size: 35px;
+    color: #2b63ff;
 }
 
 .points-text-score {
-    margin: -20px 0px 0px 100px;
-    font-size: 20px;
+    margin: -30px 0px 0px 20px;
+    font-size: 25px;
     color: #2b63ff;
 }
 

@@ -12,6 +12,14 @@ class Game {
     this.intervalEnemiesLaser = undefined;
     this.intervalEnemiesMoveDown = undefined;
     this.intervalExtraPoints = undefined;
+    this.points = 0;
+  }
+
+  // Points 
+
+  _drawPoints(){
+    let points = document.getElementById("number");
+    points.innerHTML = this.points;
   }
 
 
@@ -279,6 +287,7 @@ class Game {
     this._drawEnemies();
     this._drawEnemiesLaser();
     this._moveEnemiesLaser();
+    this._drawPoints();
 
     if (!!this.interval) {
       this.interval = window.requestAnimationFrame(this._update.bind(this));
