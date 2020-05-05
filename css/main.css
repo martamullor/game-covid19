@@ -21,36 +21,40 @@
     height: 100vh;
 }
 
-.image-container {
+.text-container {
     display: flex;
-    flex-direction: row;
-    margin-top: 20%;
+    flex-direction: column;
+    margin-top: 15%;
     align-items: center;
     justify-content: center;
 }
 
-.icon-start-screen {
-    width: 8%;
-    padding: 5px;
+.title-start {
+    color: #2b63ff;
+    font-size: 11rem;
+    font-weight: 100;
+    text-transform: uppercase;
 }
 
-.image-character {
-    width: 15%;
-    padding: 20px;
+.text-start {
+    color: #2b63ff;
+    font-size: 3rem; 
+    text-transform: uppercase;
+    margin-top: 50px;
 }
 
 .start-button {
     padding: 20px;
-    font-size: 3rem;
+    font-size: 6rem;
     background: transparent;
     border: none;
     text-align: center;
     text-decoration: none;
     color: #2b63ff;
+    text-transform: uppercase;
 }
 
 .start-button:hover {
-    font-weight: 600;
     color: #84c3ff;
 }
 
@@ -103,25 +107,25 @@ canvas {
 }
 
 #gameOverTitle {
-    font-size: 170px;
+    font-size: 140px;
     font-weight: 100;
     color: #2b63ff;
     padding: 15% 0px 10px 0px;
 }
 
 #tryAgain {
-    background-color:#2b63ff;
-    color: white;
-    font-size: 25px;
+    font-size: 20px;
     padding: 13px 40px 13px 40px;
     margin-top: 35px;
     border-radius: 10px;
+    border: 2px solid #2b63ff;
+    color: #2b63ff;
 }
 
 #tryAgain:hover {
     background-color: white;
-    border: 3px solid #2b63ff;
-    color: #2b63ff;
+    background-color:#2b63ff;
+    color: white;
 }
 
 
