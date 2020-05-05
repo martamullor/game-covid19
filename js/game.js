@@ -29,8 +29,17 @@ class Game {
     gameOverTitle.style = "display:block";
     canvas.style = "display:none";
     points.style = "display:none";
-    const containerImage = document.getElementById("image-container");
-    containerImage.style = "display:none;";
+    const containerPoints = document.getElementById("container-points");
+    containerPoints.style = "display: none";
+  }
+
+  _printWin() {
+    const gameOver = document.getElementById('gameOver');
+    gameOver.style = "display:block";
+    const gameOverTitle = document.getElementById('gameOverTitle');
+    gameOverTitle.style = "display:block";
+    canvas.style = "display:none";
+    points.style = "display:none";
     const containerPoints = document.getElementById("container-points");
     containerPoints.style = "display: none";
   }
@@ -139,7 +148,7 @@ class Game {
 
 
   _collidesEnemies() {
-    this.enemies.forEach((enemies, position) => {
+    this.enemies.forEach((enemies) => {
       if ((enemies.x + enemies.width / 2) > (this.player.x - this.player.width / 2) &&
         (enemies.x - enemies.width / 2) < (this.player.x + this.player.width / 2) &&
         (enemies.y + enemies.height / 2) > (this.player.y - this.player.height / 2) &&
@@ -162,6 +171,13 @@ class Game {
         this.ctx.drawImage(this.enemies.image, element.x, element.y, element.width, element.height);
       }
     });
+  };
+
+  _numberEnemiesScreen(){
+    if(this.enemies.length === 0){
+      this._stop;
+      this._printWin();
+    }
   };
 
 
@@ -284,11 +300,11 @@ class Game {
   // Stop All
 
   _stop() {
-    this.interval = clearInterval(this.interval);
     this.intervalLaser = clearInterval(this.intervalLaser);
     this.intervalEnemiesLaser = clearInterval(this.intervalEnemiesLaser);
     this.intervalEnemiesMoveDown = clearInterval(this.intervalEnemiesMoveDown);
     this.intervalExtraPoints = clearInterval(this.intervalExtraPoints);
+    this.interval = clearInterval(this.interval);
     console.log('stop');
   };
 
@@ -307,6 +323,7 @@ class Game {
     this._drawEnemiesLaser();
     this._moveEnemiesLaserDown();
     this._drawPoints();
+    this._numberEnemiesScreen();
 
     if (!!this.interval) {
       this.interval = window.requestAnimationFrame(this._update.bind(this));
