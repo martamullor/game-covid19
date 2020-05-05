@@ -144,7 +144,6 @@ class Game {
         (enemies.x - enemies.width / 2) < (this.player.x + this.player.width / 2) &&
         (enemies.y + enemies.height / 2) > (this.player.y - this.player.height / 2) &&
         (enemies.y - enemies.height / 2) < (this.player.y + this.player.height / 2)) {
-        // Cambiar a Game Over 
         this._stop();
         this._printGameOver();
       }
@@ -196,7 +195,6 @@ class Game {
     this.enemiesLaser.forEach((enemiesLaser, position) => {
       if (enemiesLaser.x >= (this.player.x - this.player.width / 2) && enemiesLaser.x <= (this.player.x + this.player.width / 2) &&
         enemiesLaser.y >= (this.player.y - this.player.height / 2) && enemiesLaser.y <= (this.player.y + this.player.height / 2)) {
-        // Cambiar a Game Over 
         this._stop();
         this._printGameOver();
       }

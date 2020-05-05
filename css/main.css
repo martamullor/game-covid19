@@ -29,6 +29,29 @@
     justify-content: center;
 }
 
+.start-value {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+    margin-left: -100px;
+    padding: 10px 0px 10px 0px;
+}
+
+.points-start-container {
+    padding-top: 20px;
+}
+
+.start-image {
+    width: 15%;
+}
+
+.start-value-text {
+    margin-left: -80px;
+    font-size: 4rem;
+    color: #2b63ff;
+}
+
 .title-start {
     color: #2b63ff;
     font-size: 11rem;
