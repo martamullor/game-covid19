@@ -96,48 +96,35 @@ canvas {
     font-size: 160px;
 }
 
-#gameOverTitle {
-    font-size: 165px;
-    margin-bottom: 60px;
+#gameOver {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; 
 }
 
+#gameOverTitle {
+    font-size: 170px;
+    font-weight: 100;
+    color: #2b63ff;
+    padding: 15% 0px 10px 0px;
+}
 
 #tryAgain {
-    background-color: black;
+    background-color:#2b63ff;
     color: white;
-    font-size: 30px;
-    padding: 10px 40px 10px 40px;
+    font-size: 25px;
+    padding: 13px 40px 13px 40px;
+    margin-top: 35px;
+    border-radius: 10px;
 }
 
 #tryAgain:hover {
     background-color: white;
-    border: 3px solid black;
-    color: black;
-}
-
-#container-oxygen-full {
-    overflow: hidden;
-    position: relative;
+    border: 3px solid #2b63ff;
+    color: #2b63ff;
 }
 
 
-
-#oxygen-empty {
-    position: absolute;
-    height: 150px;
-    margin-top: 30px;
-}
-
-#oxygen-full {
-    height: 150px;
-    margin-top: 30px;
-
-}
-
-.image-container {
-    position: relative;
-
-}
 
 
 

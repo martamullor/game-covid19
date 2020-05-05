@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
       canvas.style = "display:block";
 
         game = new Game({ctx}, 
-          new Player(90,90,200,500),
+          new Player(45,45,200,520),
           canvas.width - 100, 
           canvas.height);
       

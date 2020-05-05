@@ -22,6 +22,19 @@ class Game {
     points.innerHTML = this.points;
   }
 
+  _printGameOver() {
+    const gameOver = document.getElementById('gameOver');
+    gameOver.style = "display:block";
+    const gameOverTitle = document.getElementById('gameOverTitle');
+    gameOverTitle.style = "display:block";
+    canvas.style = "display:none";
+    points.style = "display:none";
+    const containerImage = document.getElementById("image-container");
+    containerImage.style = "display:none;";
+    const containerPoints = document.getElementById("container-points");
+    containerPoints.style = "display: none";
+  }
+
 
   // Player Elements
 
@@ -64,7 +77,7 @@ class Game {
   }
 
   _generateLaser() {
-    this.laser.push(new Laser(25, 25, this.player.x + 10, this.player.y));
+    this.laser.push(new Laser(20, 20, this.player.x + 15, this.player.y));
   };
 
 
@@ -133,6 +146,7 @@ class Game {
         (enemies.y - enemies.height / 2) < (this.player.y + this.player.height / 2)) {
         // Cambiar a Game Over 
         this._stop();
+        this._printGameOver();
       }
     });
   };
@@ -184,6 +198,7 @@ class Game {
         enemiesLaser.y >= (this.player.y - this.player.height / 2) && enemiesLaser.y <= (this.player.y + this.player.height / 2)) {
         // Cambiar a Game Over 
         this._stop();
+        this._printGameOver();
       }
     });
   };
