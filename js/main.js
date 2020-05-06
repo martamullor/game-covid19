@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
       game.start();
 
       gameOver.style = "display:none";
-      gameOverTitle.style = "display:none";
+      youWin.style = "display:none";
       points.style = "display:block";
       const containerPoints = document.getElementById("container-points");
       containerPoints.style = "display:block;";
@@ -53,5 +53,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     const tryAgain = document.getElementById("tryAgain");
     tryAgain.addEventListener("click", restart);
+
+    const playAgain = document.getElementById("playAgain");
+    playAgain.addEventListener("click", restart);
 
 });

@@ -105,6 +105,12 @@ canvas {
     color: #2b63ff;
 }
 
+#total {
+    font-size: 35px;
+    color: #2b63ff;
+}
+
+
 .points-text-score {
     margin: -30px 0px 0px 60px;
     font-size: 25px;
@@ -136,6 +142,41 @@ canvas {
     padding: 15% 0px 10px 0px;
 }
 
+#youWinTitle {
+    font-size: 140px;
+    font-weight: 100;
+    color: #2b63ff;
+    padding: 8% 0px 10px 0px;  
+}
+
+.points-win {
+    color: #2b63ff;
+    font-size: 35px;
+}
+
+.win-virus {
+    width: 10%;
+    padding: 30px;
+}
+
+#playAgain {
+    font-size: 3rem;
+    padding: 20px;
+    background: transparent;
+    border: none;
+    color: #2b63ff;  
+}
+
+#playAgain:hover {
+    color: #84c3ff;
+}
+
+.text-win {
+    font-size: 4rem;
+    color: #2b63ff;
+}
+
+
 #tryAgain {
     font-size: 20px;
     padding: 13px 40px 13px 40px;
@@ -149,6 +190,11 @@ canvas {
     background-color: white;
     background-color:#2b63ff;
     color: white;
+}
+
+.container-button-win {
+    display: flex;
+    flex-direction: column;
 }
 
 

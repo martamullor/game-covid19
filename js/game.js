@@ -34,14 +34,14 @@ class Game {
   }
 
   _printWin() {
-    const gameOver = document.getElementById('gameOver');
-    gameOver.style = "display:block";
-    const gameOverTitle = document.getElementById('gameOverTitle');
-    gameOverTitle.style = "display:block";
+    const youWin = document.getElementById('youWin');
+    youWin.style = "display:block";
     canvas.style = "display:none";
     points.style = "display:none";
     const containerPoints = document.getElementById("container-points");
     containerPoints.style = "display: none";
+    let pointsTotal = document.getElementById("total");
+    pointsTotal.innerHTML = this.points;
   }
 
 
@@ -132,18 +132,20 @@ class Game {
     for (let i = 0; i < 15; i++) {
       this.enemies.push(new Enemy(40, 40, 80 + (i * 50), 80, 'bat'));
       this.enemies.push(new Enemy(40, 40, 80 + (i * 50), 130, 'bat'));
-      this.enemies.push(new Enemy(45, 45, 80 + (i * 50), 180, 'virus'));
+      this.enemies.push(new Enemy(40, 40, 80 + (i * 50), 180, 'bat'));
       this.enemies.push(new Enemy(45, 45, 80 + (i * 50), 230, 'virus'));
+      this.enemies.push(new Enemy(45, 45, 80 + (i * 50), 280, 'virus'));
+      this.enemies.push(new Enemy(45, 45, 80 + (i * 50), 330, 'virus'));
     }
   };
 
   _moveDownEnemies() {
     this.intervalEnemiesMoveDown = setInterval(() => {
       for (let i = 0; i < this.enemies.length; i++) {
-        this.enemies[i].y += 3;
+        this.enemies[i].y += 5;
         this._collidesEnemies();
       }
-    }, 1000);
+    }, 900);
   };
 
 
@@ -175,7 +177,7 @@ class Game {
 
   _numberEnemiesScreen(){
     if(this.enemies.length === 0){
-      this._stop;
+      this._stop();
       this._printWin();
     }
   };
