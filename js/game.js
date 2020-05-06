@@ -196,7 +196,7 @@ class Game {
   _generateEnemiesLaser() {
     this.intervalEnemiesLaser = setInterval(() => {
       this.enemiesLaser.push(new EnemiesLaser(20, 20, this.enemies[this._getRandomIntInclusive(0, 50)].x, this.enemies[this._getRandomIntInclusive(0, 10)].y));
-    }, 300);
+    }, 150);
   };
 
 
@@ -210,7 +210,7 @@ class Game {
 
 
   _collidesWithLaserEnemies() {
-    this.enemiesLaser.forEach((enemiesLaser, position) => {
+    this.enemiesLaser.forEach((enemiesLaser) => {
       if (enemiesLaser.x >= (this.player.x - this.player.width / 2) && enemiesLaser.x <= (this.player.x + this.player.width / 2) &&
         enemiesLaser.y >= (this.player.y - this.player.height / 2) && enemiesLaser.y <= (this.player.y + this.player.height / 2)) {
         this._stop();
