@@ -13,6 +13,14 @@ class Game {
     this.intervalEnemiesMoveDown = undefined;
     this.intervalExtraPoints = undefined;
     this.points = 0;
+    this.enemiesKilledSound = new Audio();
+    this.enemiesKilledSound.src = './sound/invaderkilled.wav';
+    this.laserGun = new Audio();
+    this.laserGun.src = './sound/Laser-Gun-SoundEffect.mp3';
+    this.youWinSound = new Audio();
+    this.youWinSound.src = './sound/YouWin-sound.mp3';
+    this.gameOverSound = new Audio();
+    this.gameOverSound.src = './sound/gameover.mp3';
   }
 
   // Points 
@@ -23,6 +31,7 @@ class Game {
   }
 
   _printGameOver() {
+    this.gameOverSound.play();
     const gameOver = document.getElementById('gameOver');
     gameOver.style = "display:block";
     const gameOverTitle = document.getElementById('gameOverTitle');
@@ -34,6 +43,7 @@ class Game {
   }
 
   _printWin() {
+    this.youWinSound.play();
     const youWin = document.getElementById('youWin');
     youWin.style = "display:block";
     canvas.style = "display:none";
@@ -69,6 +79,7 @@ class Game {
           }
           break;
         case 32: // space bar - laser player
+          this.laserGun.play();
           this._generateLaser();
           break;
       }
@@ -105,10 +116,12 @@ class Game {
           laser.y >= (enemies.y - enemies.height / 2) && laser.y <= (enemies.y + enemies.height / 2)) {
           if (enemies.type === 'bat') {
             this.points += 50;
+            this.enemiesKilledSound.play();
             this.laser.shift();
             this.enemies.splice(position, 1);
           } else if (enemies.type === 'virus') {
             this.points += 10;
+            this.enemiesKilledSound.play();
             this.laser.shift();
             this.enemies.splice(position, 1);
           }
