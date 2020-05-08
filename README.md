@@ -11,8 +11,7 @@ Html5 __Canvas__ and Vanilla __Javascript__
 __main.js__
 ````
   game = new Game({ctx}, 
-    new Player(80,80,200,500),
-    new Background(886,3130,0,0), 
+    new Player(45,45,200,520),
     canvas.width-100, 
     canvas.height);
 
@@ -20,60 +19,77 @@ __main.js__
     function start(){
       canvas.style = "display:block";
       game.start();
+
+     function restart(){
+      canvas.style = "display:block";
+
+        game = new Game({ctx}, 
+          new Player(45,45,200,520),
+          canvas.width - 100, 
+          canvas.height);
+      
+      game.start();
+      
+      
 ````
 __Game.js__
+
 ````
 class Game {
-  constructor(options, player,background,canvasWidth,canvasHeight){
+  constructor(options, player, canvasWidth, canvasHeight) {
     this.ctx = options.ctx;
     this.player = player;
-    this.background = background;
-    this.interval = undefined;
-    this.intervalEnemies = undefined;
-    this.intervalOxygen = undefined;
-    this.intervalJewel = undefined;
-    this.obstacle = [];
-    this.intervalBackground = undefined;
     this.canvasWidth = canvasWidth;
     this.canvasHeight = canvasHeight;
-    this.time = 60;
+    this.laser = [];
+    this.enemies = [];
+    this.enemiesLaser = [];
+    this.extraPoints = [];
+    this.interval = undefined;
+    this.intervalEnemiesLaser = undefined;
+    this.intervalEnemiesMoveDown = undefined;
+    this.intervalExtraPoints = undefined;
     this.points = 0;
-    this.jewel = 0;
-    this.pause = false;
-    this.enemiesSound = new Audio();
-    this.enemiesSound.src = './sound/enemies.mp3';
-    this.oxygenSound = new Audio();
-    this.oxygenSound.src = "./sound/oxygen.mp3";
-    this.jewelSound = new Audio();
-    this.jewelSound.src = "./sound/jewel.mp3";
-    this.heightNumber = 170;
+    this.enemiesKilledSound = new Audio();
+    this.enemiesKilledSound.src = './sound/invaderkilled.wav';
+    this.laserGun = new Audio();
+    this.laserGun.src = './sound/Laser-Gun-SoundEffect.mp3';
+    this.youWinSound = new Audio();
+    this.youWinSound.src = './sound/YouWin-sound.mp3';
+    this.gameOverSound = new Audio();
+    this.gameOverSound.src = './sound/gameover.mp3';
   }
 
-   _update();
-   _pause();
-   _stop();
-   _clear();
-   _getRandomNumber(max);
-   _drawObstacle();
-   _collidesWithObstacle();
-   _deleteObstacles();
-   _moveObstacle();
-   _generateJewel();
-   _generateOxygen();
-   _generateObstacle();
-   _assignControlsToKeys();
-   _drawPlayer();
-  _moveBackground();
-  _drawBackground();
-  _printGameOver();
-  _gameOver();
-  _drawOxygen();
-  _drawJewelNumber();
-  _drawPoints();
-  _drawTime();
+    _assignControlsToKeys();
+    _generateEnemies();
+    _generateEnemiesLaser();
+    _generateExtraPoints();
+    _moveDownEnemies();
+    _clear();
+    _stop();
+    _update();
+    _drawPlayer();
+    _drawLaser();
+    _drawExtraPoints();
+    _moveExtraPoints();
+    _moveLaser();
+    _drawEnemies();
+    _drawEnemiesLaser();
+    _moveEnemiesLaserDown();
+    _drawPoints();
+    _numberEnemiesScreen();
+    _collidesExtraPoint();
+    _deleteExtraPoints();
+    _deleteEnemiesLaser();
+    _collidesWithLaserEnemies();
+    _numberEnemiesScreen();
+    _collidesEnemies();
+    _deleteLaser();
+    _collidesLaser();
 
 ````
 __Player.js__
+
 ````
 class Player {
   constructor(width,height, x, y){
@@ -81,30 +97,65 @@ class Player {
     this.height = height;
     this.x = x;
     this.y = y;
-    this.color = "green";
-    this.image = undefined;
-    this.movement = new Audio();
-    this.movement.src = "./sound/movement.mp3";
     this.image = new Image();
-    this.image.src = "./img/astronaut.png";
+    this.image.src = "./img/testtube.png";
   }
 
   moveRight();
   moveLeft();
 
-Player.move();
 ````
-__Obstacles.js__
+__Laser.js__
+
 ````
-class Obstacle {
-    constructor(width,height, x, y,type){
+class Laser {
+    constructor(width,height,x, y){
       this.width = width;
       this.height = height;
       this.x = x;
       this.y = y;
-      this.type = type;
-      this.interval = undefined;
-    }
-    
+    }    
+}    
+
+````
+__ExtraPoints.js__
+
+````
+class ExtraPoints {
+  constructor(width,height,x, y){
+    this.width = width;
+    this.height = height;
+    this.x = x;
+    this.y = y;
+  }    
+}    
+
+````
+__Enemy.js__
+
+````
+class Enemy {
+  constructor(width,height,x, y, type){
+    this.width = width;
+    this.height = height;
+    this.x = x;
+    this.y = y;
+    this.type = type;
+  }    
+}  
+
+````
+__EnemiesLaser.js__
+
+````
+  
+class EnemiesLaser {
+    constructor(width,height,x, y){
+      this.width = width;
+      this.height = height;
+      this.x = x;
+      this.y = y;
+    }    
+} 
 
 ````
