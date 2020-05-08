@@ -1,6 +1,6 @@
 # COVID INVADERS
 
-Reinterpretación del clásico juego space invaders adaptado a la situación actual del COVID-19.
+Interpretation of the classic space invaders game adapted to the current situation of the COVID-19.
 
 * * *
 ### Technique
